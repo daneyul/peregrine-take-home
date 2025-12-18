@@ -6,7 +6,7 @@
   bottom: 0;
   background-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(4px);
-  z-index: 9;
+  z-index: 9999;
 }
 
 .toaster {
@@ -16,7 +16,7 @@
   transform: translateX(-50%);
   width: 100%;
   pointer-events: none;
-  z-index: 10;
+  z-index: 10000;
   overflow-y: auto;
   padding-top: 1rem;
   height: 100%;
@@ -36,7 +36,7 @@
   height: 60px;
   background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.9));
   pointer-events: none;
-  z-index: 100;
+  z-index: 10001;
 }
 
 .options-button-container {
@@ -46,7 +46,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  z-index: 10;
+  z-index: 10000;
 }
 
 .dismiss-all-button, .collapse-all-button {
@@ -72,4 +72,16 @@
   width: 16px;
   height: 16px;
   color: white;
+}
+
+@media (max-width: 640px) {
+  .toaster {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .options-button-container {
+    left: auto;
+    right: 0.25rem;
+  }
 }

@@ -88,7 +88,7 @@ export const Toast: React.FC<ToastComponentProps> = props => {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: totalToasts - offset,
+        zIndex: 10000 + (totalToasts - offset),
         overflow: 'visible',
       }}
     >

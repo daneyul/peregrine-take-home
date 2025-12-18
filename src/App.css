@@ -45,16 +45,11 @@ a:hover {
   line-height: 1;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
   border: 1px solid hsl(0, 0%, 93%);
-  z-index: 100;
+  z-index: 10002;
 }
 
 @media (max-width: 640px) {
   :root {
-    --toast-max-width: calc(100vw - 48px);
-  }
-
-  .options-button-container {
-    left: auto;
-    right: 12px;
+    --toast-max-width: calc(100vw - 120px);
   }
 }

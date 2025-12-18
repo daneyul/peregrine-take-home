@@ -1,4 +1,5 @@
 import './App.css';
+import { MotionConfig } from 'motion/react';
 import { Toaster } from './components/Toaster/Toaster';
 import { INFO_MESSAGES, MISC_MESSAGES } from './utils/messages';
 import { useToasts } from './hooks/useToasts';
@@ -15,7 +16,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <div className="card">
         <button className="toast-btn" onClick={makeToast}>
           Toast
@@ -27,7 +28,7 @@ export default function App() {
         onRemove={removeToast}
         onRemoveAll={removeAllToasts}
       />
-    </>
+    </MotionConfig>
   );
 }
 
