@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import { motion } from 'motion/react';
 import { useMeasure } from 'react-use';
 import './Toast.css';
@@ -7,7 +7,6 @@ import { Cross2Icon } from '@radix-ui/react-icons';
 export interface ToastProps {
   id: string;
   message: React.ReactNode;
-  icon?: React.ReactNode;
 }
 
 interface ToastComponentProps extends ToastProps {
@@ -19,22 +18,36 @@ interface ToastComponentProps extends ToastProps {
   initialScale?: number;
   initialY?: number;
   exitScale?: number;
+  expandedY?: number;
+  onUpdateHeight?: (id: string, height: number) => void;
 }
 
 export const Toast: React.FC<ToastComponentProps> = props => {
-  const { message, icon, index, totalToasts, isExpanded, initialScale, initialY, exitScale, onRemove } = props;
+  const { id, message, index, totalToasts, isExpanded, initialScale, initialY, exitScale, expandedY, onUpdateHeight, onRemove } = props;
   const isFront = index === totalToasts - 1;
   const offset = totalToasts - 1 - index;
   const [isRemoving, setIsRemoving] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [ref, { height }] = useMeasure<HTMLDivElement>();
 
-  const handleClose = (e: React.MouseEvent) => {
+  useLayoutEffect(() => {
+    if (height && onUpdateHeight) {
+      onUpdateHeight(id, height);
+    }
+  }, [height, id, onUpdateHeight]);
+
+  const handleClose = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation();
     setIsRemoving(true);
     setTimeout(() => {
       onRemove();
     }, 150);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      handleClose(e);
+    }
   };
 
   return (
@@ -49,7 +62,7 @@ export const Toast: React.FC<ToastComponentProps> = props => {
       }}
       animate={{
         opacity: 1,
-        y: isExpanded ? offset * 64 : offset * 14,
+        y: isExpanded ? (expandedY ?? 0) : offset * 14,
         scale: isExpanded ? 1 : (isFront ? 1 : 1 - offset * 0.05),
         height: isRemoving ? 0 : height || 'auto',
       }}
@@ -69,7 +82,7 @@ export const Toast: React.FC<ToastComponentProps> = props => {
         left: 0,
         right: 0,
         zIndex: totalToasts - offset,
-        overflow: isRemoving ? 'hidden' : 'visible',
+        overflow: 'visible',
       }}
     >
       <div ref={ref}>
@@ -77,6 +90,13 @@ export const Toast: React.FC<ToastComponentProps> = props => {
           className="toast"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onFocus={() => setIsHovered(true)}
+          onBlur={() => setIsHovered(false)}
+          onKeyDown={handleKeyDown}
+          tabIndex={0}
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
           initial={{
             paddingTop: '1rem',
             paddingBottom: '1rem',
@@ -104,21 +124,28 @@ export const Toast: React.FC<ToastComponentProps> = props => {
                 }
               }}
             >
-              {icon && <div className="toast-icon">{icon}</div>}
               <div className="toast-message">{message}</div>
             </div>
-            <motion.span
+            <motion.button
               className="toast-close-button"
               onClick={handleClose}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleClose(e);
+                }
+              }}
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{
                 opacity: isHovered ? 1 : 0,
                 scale: isHovered ? 1 : 0.7
               }}
               transition={{ type: 'spring', stiffness: 400, damping: 25, duration: 300 }}
+              aria-label="Close notification"
+              tabIndex={isHovered ? 0 : -1}
             >
               <Cross2Icon className="dismiss-icon" />
-            </motion.span>
+            </motion.button>
           </motion.div>
         </motion.div>
       </div>

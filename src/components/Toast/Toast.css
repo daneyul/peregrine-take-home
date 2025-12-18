@@ -1,5 +1,6 @@
 .toast-wrapper {
   position: relative;
+  pointer-events: auto;
 }
 
 .toast {
@@ -12,6 +13,11 @@
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   position: relative;
+  outline: none;
+}
+
+.toast:focus-visible {
+  box-shadow: 0px 2px 8px -webkit-focus-ring-color, 0 0 0 2px -webkit-focus-ring-color;
 }
 
 .toast-content {
@@ -25,11 +31,12 @@
 .toast-icon {
   flex-shrink: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 20px;
   height: 20px;
   color: var(--black);
+  margin-top: 2px;
 }
 
 .toast-icon svg {
@@ -69,12 +76,21 @@
   min-width: 0;
 }
 
-.toast-message a span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-  flex-shrink: 1;
+.toast-wrapper[data-expanded='false'] .toast-message a,
+.toast-wrapper[data-expanded='false'] .toast-message button {
+  display: inline;
+}
+
+.toast-wrapper[data-expanded='true'] .toast-message a,
+.toast-wrapper[data-expanded='true'] .toast-message button {
+  display: inline;
+}
+
+.toast-wrapper[data-expanded='true'] .toast-message a span {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  word-break: break-all;
 }
 
 .toast-message button:hover,
@@ -98,12 +114,21 @@
   margin-left: 2px;
 }
 
+.toast-wrapper[data-expanded='false'] .toast-message {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
 .toast-wrapper[data-expanded='false'][data-front='false'] .toast-message {
   opacity: 0;
 }
 
 .toast-wrapper[data-expanded='true'] .toast-message {
   opacity: 1;
+  white-space: normal;
+  display: block;
 }
 
 .toast-close-button {
@@ -125,6 +150,11 @@
 
 .toast-close-button:active {
   scale: 0.9;
+}
+
+.toast-close-button:focus-visible {
+  outline: 2px solid -webkit-focus-ring-color;
+  outline-offset: -1px;
 }
 
 .toast-close-button .close-icon {

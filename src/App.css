@@ -1,8 +1,4 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+:root {
   --btn-bg-color: #4a5055;
   --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --border: 1px solid hsl(0, 0%, 93%);
@@ -10,6 +6,13 @@
   --toast-max-width: 400px;
   --black: #2e2e2e;
   --top-offset: 16px;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
 }
 
 body {
@@ -30,4 +33,17 @@ a:hover {
 
 .toast-btn {
   background-color: var(--btn-bg-color);
+}
+
+.tooltip-content {
+  background-color: white;
+  color: var(--black);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid hsl(0, 0%, 93%);
+  z-index: 100;
 }
