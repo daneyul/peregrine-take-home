@@ -1,6 +1,6 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  line-height: 1.35;
   font-weight: 400;
 
   color: #213547;
@@ -48,7 +48,10 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+button:active {
+  background-color: black;
+}
+button:hover {
+  background-color: rgba(0,0,0,0.5);
+  transition: all 0.2s ease;
 }

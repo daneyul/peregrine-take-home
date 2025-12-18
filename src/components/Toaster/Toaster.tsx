@@ -110,10 +110,11 @@ export const Toaster: React.FC<ToasterProps> = props => {
               if (!shouldBeVisible) return null;
 
               const backToastScale = 1 - (maxToasts - 1) * ANIMATION_SCALE.STACK_REDUCTION;
-              const isEnteringBeyondMax = isExpanded && index < toasts.length - maxToasts;
+              // cards beyond max toasts enter from back, not top
+              const isEnteringBeyondMax = index < toasts.length - maxToasts;
               const lastVisibleToastY = (maxToasts - 1) * collapsedSpacing;
 
-              // calculate cumulative Y position of each toast when expanded
+              // calculate cumulative y-pos of each toast when expanded
               // sorting by front toast (newest) onwards
               let expandedY = 0;
               for (let i = toasts.length - 1; i > index; i--) {

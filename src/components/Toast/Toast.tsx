@@ -57,6 +57,18 @@ export const Toast: React.FC<ToastComponentProps> = props => {
     }
   };
 
+  // In collapsed mode, non-front toasts should appear at their final position (not slide from top)
+  // Only the front toast slides in from -100
+  const shouldSlideFromTop = isFront || isExpanded;
+
+  const defaultInitialY = initialY !== undefined
+    ? initialY
+    : (shouldSlideFromTop ? ANIMATION_OFFSET.INITIAL_Y : offset * ANIMATION_OFFSET.COLLAPSED_SPACING);
+
+  const defaultInitialScale = initialScale !== undefined
+    ? initialScale
+    : (shouldSlideFromTop ? 1 : (1 - offset * ANIMATION_SCALE.STACK_REDUCTION));
+
   return (
     <motion.div
       className="toast-wrapper"
@@ -64,8 +76,8 @@ export const Toast: React.FC<ToastComponentProps> = props => {
       data-expanded={isExpanded}
       initial={{
         opacity: 0,
-        y: initialY !== undefined ? initialY : ANIMATION_OFFSET.INITIAL_Y,
-        scale: initialScale !== undefined ? initialScale : 1
+        y: defaultInitialY,
+        scale: defaultInitialScale
       }}
       animate={{
         opacity: 1,
@@ -125,6 +137,13 @@ export const Toast: React.FC<ToastComponentProps> = props => {
               onClick={(e) => {
                 if (isExpanded) {
                   e.stopPropagation();
+                } else {
+                  // Prevent links from opening in collapsed state
+                  const target = e.target as HTMLElement;
+                  if (target.tagName === 'A' || target.closest('a')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
                 }
               }}
             >

@@ -16,10 +16,6 @@
   outline: none;
 }
 
-.toast:focus-visible {
-  box-shadow: 0px 2px 8px -webkit-focus-ring-color, 0 0 0 2px -webkit-focus-ring-color;
-}
-
 .toast-content {
   display: flex;
   align-items: flex-start;
@@ -53,7 +49,7 @@
   gap: 0.25rem;
   flex: 1;
   text-align: left;
-  line-height: 1.4;
+  line-height: 1.35;
   min-width: 0;
   overflow: hidden;
 }
@@ -121,6 +117,13 @@
   display: block;
 }
 
+.toast-wrapper[data-expanded='false'] .toast-message a,
+.toast-wrapper[data-expanded='false'] .toast-message button {
+  cursor: default;
+  text-decoration: none;
+  pointer-events: none;
+}
+
 .toast-wrapper[data-expanded='false'][data-front='false'] .toast-message {
   opacity: 0;
 }
@@ -150,11 +153,6 @@
 
 .toast-close-button:active {
   scale: 0.9;
-}
-
-.toast-close-button:focus-visible {
-  outline: 2px solid -webkit-focus-ring-color;
-  outline-offset: -1px;
 }
 
 .toast-close-button .close-icon {
