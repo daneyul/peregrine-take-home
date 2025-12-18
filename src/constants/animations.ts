@@ -30,6 +30,8 @@ export const TOAST_DEFAULTS = {
   HEIGHT: 80,
   BOX_SHADOW: '0px 2px 8px rgba(0, 0, 0, 0.1)',
   BOX_SHADOW_HIDDEN: '0px 0px 0px rgba(0, 0, 0, 0)',
+  AUTO_DISMISS_ENABLED: false,
+  AUTO_DISMISS_DURATION: 4000, // 4 seconds
 } as const;
 
 export const SPRING_CONFIG = {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { TrashIcon } from '@radix-ui/react-icons';
 import * as Tooltip from '@radix-ui/react-tooltip';
@@ -27,12 +27,26 @@ export const Toaster: React.FC<ToasterProps> = props => {
   const { toasts, onRemove, onRemoveAll, maxToasts = 3 } = props;
   const [isExpanded, setIsExpanded] = useState(false);
   const [heights, setHeights] = useState<Map<string, number>>(new Map());
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = () => {
     if (toasts.length > 1) {
       setIsExpanded(prev => !prev);
     }
   };
+
+  // Auto-dismiss all toasts after duration
+  useEffect(() => {
+    if (!TOAST_DEFAULTS.AUTO_DISMISS_ENABLED) return;
+    if (toasts.length === 0) return;
+    if (isHovered || isExpanded) return;
+
+    const timer = setTimeout(() => {
+      onRemoveAll();
+    }, TOAST_DEFAULTS.AUTO_DISMISS_DURATION);
+
+    return () => clearTimeout(timer);
+  }, [toasts.length, isHovered, isExpanded, onRemoveAll]);
 
   const updateHeight = (id: string, height: number) => {
     setHeights(prev => {
@@ -75,7 +89,13 @@ export const Toaster: React.FC<ToasterProps> = props => {
           />
         )}
       </AnimatePresence>
-      <div className="toaster" onClick={handleClick} aria-label="Notifications">
+      <div
+        className="toaster"
+        onClick={handleClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        aria-label="Notifications"
+      >
         <div
           style={{
             position: 'relative',
@@ -129,6 +149,8 @@ export const Toaster: React.FC<ToasterProps> = props => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -topOffset }}
               transition={TRANSITIONS.SLOW_EASE_OUT}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
             >
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>
