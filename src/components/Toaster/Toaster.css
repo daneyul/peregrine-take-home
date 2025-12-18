@@ -1,0 +1,75 @@
+.toaster-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  z-index: 9;
+}
+
+.toaster {
+  position: fixed;
+  top: var(--top-offset);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  pointer-events: none;
+  z-index: 10;
+  overflow-y: auto;
+  max-height: 100%;
+  padding-top: 1rem;
+}
+
+.toaster > * {
+  pointer-events: auto;
+}
+
+.toaster-scroll-indicator {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 400px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.9));
+  pointer-events: none;
+  z-index: 100;
+}
+
+.options-button-container {
+  position: fixed;
+  top: calc(var(--top-offset) + 1rem);
+  left: calc(50% + (var(--toast-max-width) / 2) + 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 10;
+}
+
+.dismiss-all-button, .collapse-all-button {
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--border);
+  background-color: var(--btn-bg-color);
+  box-shadow: var(--box-shadow);
+  padding: 0;
+  transition: scale 0.2s ease-out;
+  cursor: pointer;
+}
+
+.dismiss-all-button:active, .collapse-all-button:active {
+  scale: 0.95;
+}
+
+.trash-icon, .close-icon, .dismiss-icon {
+  width: 16px;
+  height: 16px;
+  color: white;
+}

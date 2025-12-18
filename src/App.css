@@ -1,0 +1,33 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  --btn-bg-color: #4a5055;
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --border: 1px solid hsl(0, 0%, 93%);
+  --box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  --toast-max-width: 400px;
+  --black: #2e2e2e;
+  --top-offset: 16px;
+}
+
+body {
+  position: relative;
+}
+
+a:hover {
+  color: var(--black);
+}
+
+.card {
+  padding: 2em;
+  bottom: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toast-btn {
+  background-color: var(--btn-bg-color);
+}
