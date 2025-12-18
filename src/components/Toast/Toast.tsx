@@ -74,7 +74,7 @@ export const Toast: React.FC<ToastComponentProps> = props => {
 
   // custom transition for hover effect in collapsed mode
   const hoverTransition = !isExpanded && isStackHovered !== undefined
-    ? { type: 'spring' as const, stiffness: 400, damping: 25, duration: 0.3 }
+    ? TRANSITIONS.HOVER_SPRING
     : TRANSITIONS.NORMAL_EASE_OUT;
 
   return (

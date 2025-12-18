@@ -47,4 +47,5 @@ export const TRANSITIONS = {
   NORMAL_EASE_IN_OUT: { duration: ANIMATION_DURATION.NORMAL, ease: 'easeInOut' },
   SLOW_EASE_OUT: { duration: ANIMATION_DURATION.SLOW, ease: 'easeOut' },
   SLOW_SPRING: { duration: ANIMATION_DURATION.SLOW, ease: 'easeOut', type: 'spring' as const, ...SPRING_CONFIG },
+  HOVER_SPRING: { type: 'spring' as const, stiffness: 400, damping: 25, duration: ANIMATION_DURATION.NORMAL },
 } as const;

@@ -150,7 +150,7 @@ export const Toaster: React.FC<ToasterProps> = props => {
               initial={{ opacity: 0, y: -topOffset }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -topOffset }}
-              transition={TRANSITIONS.SLOW_EASE_OUT}
+              transition={TRANSITIONS.HOVER_SPRING}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
