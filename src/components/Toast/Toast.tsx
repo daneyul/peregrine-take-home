@@ -22,6 +22,7 @@ interface ToastComponentProps extends ToastProps {
   index: number;
   totalToasts: number;
   isExpanded: boolean;
+  isHovered?: boolean;
   initialScale?: number;
   initialY?: number;
   exitScale?: number;
@@ -30,7 +31,7 @@ interface ToastComponentProps extends ToastProps {
 }
 
 export const Toast: React.FC<ToastComponentProps> = props => {
-  const { id, message, index, totalToasts, isExpanded, initialScale, initialY, exitScale, expandedY, onUpdateHeight, onRemove } = props;
+  const { id, message, index, totalToasts, isExpanded, isHovered: isStackHovered, initialScale, initialY, exitScale, expandedY, onUpdateHeight, onRemove } = props;
   const isFront = index === totalToasts - 1;
   const offset = totalToasts - 1 - index;
   const [isRemoving, setIsRemoving] = useState(false);
@@ -57,17 +58,24 @@ export const Toast: React.FC<ToastComponentProps> = props => {
     }
   };
 
-  // In collapsed mode, non-front toasts should appear at their final position (not slide from top)
-  // Only the front toast slides in from -100
+  // n collapsed mode, non-front toasts should appear at their final position (not slide from top)
+  // only the front toast slides in from -100
   const shouldSlideFromTop = isFront || isExpanded;
+
+  const collapsedSpacing = isStackHovered ? ANIMATION_OFFSET.COLLAPSED_SPACING_HOVER : ANIMATION_OFFSET.COLLAPSED_SPACING;
 
   const defaultInitialY = initialY !== undefined
     ? initialY
-    : (shouldSlideFromTop ? ANIMATION_OFFSET.INITIAL_Y : offset * ANIMATION_OFFSET.COLLAPSED_SPACING);
+    : (shouldSlideFromTop ? ANIMATION_OFFSET.INITIAL_Y : offset * collapsedSpacing);
 
   const defaultInitialScale = initialScale !== undefined
     ? initialScale
     : (shouldSlideFromTop ? 1 : (1 - offset * ANIMATION_SCALE.STACK_REDUCTION));
+
+  // custom transition for hover effect in collapsed mode
+  const hoverTransition = !isExpanded && isStackHovered !== undefined
+    ? { type: 'spring' as const, stiffness: 400, damping: 25, duration: 0.3 }
+    : TRANSITIONS.NORMAL_EASE_OUT;
 
   return (
     <motion.div
@@ -81,7 +89,7 @@ export const Toast: React.FC<ToastComponentProps> = props => {
       }}
       animate={{
         opacity: 1,
-        y: isExpanded ? (expandedY ?? 0) : offset * ANIMATION_OFFSET.COLLAPSED_SPACING,
+        y: isExpanded ? (expandedY ?? 0) : offset * collapsedSpacing,
         scale: isExpanded ? 1 : (isFront ? 1 : 1 - offset * ANIMATION_SCALE.STACK_REDUCTION),
         height: isRemoving ? 0 : height || 'auto',
       }}
@@ -92,7 +100,7 @@ export const Toast: React.FC<ToastComponentProps> = props => {
         transition: TRANSITIONS.QUICK_EASE_OUT
       }}
       transition={{
-        ...TRANSITIONS.SLOW_EASE_OUT,
+        ...hoverTransition,
         height: { ...TRANSITIONS.NORMAL_EASE_OUT, delay: isRemoving ? TRANSITIONS.NORMAL_EASE_OUT.duration : 0 }
       }}
       style={{

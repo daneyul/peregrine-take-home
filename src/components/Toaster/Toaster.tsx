@@ -129,6 +129,7 @@ export const Toaster: React.FC<ToasterProps> = props => {
                   index={index}
                   totalToasts={toasts.length}
                   isExpanded={isExpanded}
+                  isHovered={isHovered}
                   exitScale={backToastScale}
                   initialScale={isEnteringBeyondMax ? backToastScale : undefined}
                   initialY={isEnteringBeyondMax ? lastVisibleToastY : undefined}

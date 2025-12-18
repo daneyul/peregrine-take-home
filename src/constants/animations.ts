@@ -19,6 +19,7 @@ export const ANIMATION_OFFSET = {
   VERTICAL: 32,
   INITIAL_Y: -100,
   COLLAPSED_SPACING: 14,
+  COLLAPSED_SPACING_HOVER: 10,
 } as const;
 
 export const TOAST_SPACING = {
