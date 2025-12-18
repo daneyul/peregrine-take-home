@@ -1,8 +1,11 @@
 import { motion } from 'motion/react';
+import { TRANSITIONS } from '../../constants/animations';
 
 interface AnimatedChevronProps {
   isExpanded: boolean;
 }
+
+// These are two lines that form a chevron and can be animated separately
 
 export const AnimatedChevron: React.FC<AnimatedChevronProps> = ({ isExpanded }) => {
   return (
@@ -16,37 +19,41 @@ export const AnimatedChevron: React.FC<AnimatedChevronProps> = ({ isExpanded }) 
     >
       {/* Left line */}
       <motion.line
-        x1="4"
-        y1="6"
-        x2="8"
-        y2="10"
         stroke="white"
         strokeWidth="1.5"
         strokeLinecap="round"
+        initial={{
+          x1: 4,
+          y1: 6,
+          x2: 8,
+          y2: 10,
+        }}
         animate={{
-          x1: isExpanded ? 4 : 4,
+          x1: 4,
           y1: isExpanded ? 10 : 6,
           x2: 8,
           y2: isExpanded ? 6 : 10,
         }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={TRANSITIONS.NORMAL_EASE_IN_OUT}
       />
       {/* Right line */}
       <motion.line
-        x1="8"
-        y1="10"
-        x2="12"
-        y2="6"
         stroke="white"
         strokeWidth="1.5"
         strokeLinecap="round"
+        initial={{
+          x1: 8,
+          y1: 10,
+          x2: 12,
+          y2: 6,
+        }}
         animate={{
           x1: 8,
           y1: isExpanded ? 6 : 10,
-          x2: isExpanded ? 12 : 12,
+          x2: 12,
           y2: isExpanded ? 10 : 6,
         }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        transition={TRANSITIONS.NORMAL_EASE_IN_OUT}
       />
     </svg>
   );

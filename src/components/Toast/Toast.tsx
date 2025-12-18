@@ -3,10 +3,18 @@ import { motion } from 'motion/react';
 import { useMeasure } from 'react-use';
 import './Toast.css';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import {
+  ANIMATION_SCALE,
+  ANIMATION_OFFSET,
+  ANIMATION_TIMEOUT,
+  SPRING_CONFIG,
+  TOAST_DEFAULTS,
+  TRANSITIONS
+} from '../../constants/animations';
 
 export interface ToastProps {
   id: string;
-  message: React.ReactNode;
+  message: React.ReactNode; // So we can add custom jsx elements like icons, buttons, links
 }
 
 interface ToastComponentProps extends ToastProps {
@@ -14,7 +22,6 @@ interface ToastComponentProps extends ToastProps {
   index: number;
   totalToasts: number;
   isExpanded: boolean;
-  type?: 'success' | 'error' | 'warning' | 'info';
   initialScale?: number;
   initialY?: number;
   exitScale?: number;
@@ -41,7 +48,7 @@ export const Toast: React.FC<ToastComponentProps> = props => {
     setIsRemoving(true);
     setTimeout(() => {
       onRemove();
-    }, 150);
+    }, ANIMATION_TIMEOUT.SHORT);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -57,24 +64,24 @@ export const Toast: React.FC<ToastComponentProps> = props => {
       data-expanded={isExpanded}
       initial={{
         opacity: 0,
-        y: initialY !== undefined ? initialY : -100,
+        y: initialY !== undefined ? initialY : ANIMATION_OFFSET.INITIAL_Y,
         scale: initialScale !== undefined ? initialScale : 1
       }}
       animate={{
         opacity: 1,
-        y: isExpanded ? (expandedY ?? 0) : offset * 14,
-        scale: isExpanded ? 1 : (isFront ? 1 : 1 - offset * 0.05),
+        y: isExpanded ? (expandedY ?? 0) : offset * ANIMATION_OFFSET.COLLAPSED_SPACING,
+        scale: isExpanded ? 1 : (isFront ? 1 : 1 - offset * ANIMATION_SCALE.STACK_REDUCTION),
         height: isRemoving ? 0 : height || 'auto',
       }}
       exit={{
         opacity: 0,
-        y: -32,
+        y: -ANIMATION_OFFSET.VERTICAL,
         scale: exitScale,
-        transition: { duration: 0.25, ease: 'easeOut' }
+        transition: TRANSITIONS.QUICK_EASE_OUT
       }}
       transition={{
-        duration: 0.4,
-        height: { duration: 0.3, delay: isRemoving ? 0.3 : 0, ease: 'easeOut' }
+        ...TRANSITIONS.SLOW_EASE_OUT,
+        height: { ...TRANSITIONS.NORMAL_EASE_OUT, delay: isRemoving ? TRANSITIONS.NORMAL_EASE_OUT.duration : 0 }
       }}
       style={{
         position: 'absolute',
@@ -94,27 +101,24 @@ export const Toast: React.FC<ToastComponentProps> = props => {
           onBlur={() => setIsHovered(false)}
           onKeyDown={handleKeyDown}
           tabIndex={0}
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
           initial={{
             paddingTop: '1rem',
             paddingBottom: '1rem',
             borderWidth: '1px',
-            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+            boxShadow: TOAST_DEFAULTS.BOX_SHADOW,
           }}
           animate={{
             paddingTop: isRemoving ? 0 : '1rem',
             paddingBottom: isRemoving ? 0 : '1rem',
             marginBottom: isRemoving ? 0 : undefined,
             borderWidth: isRemoving ? 0 : '1px',
-            boxShadow: isRemoving ? '0px 0px 0px rgba(0, 0, 0, 0)' : '0px 2px 8px rgba(0, 0, 0, 0.1)',
+            boxShadow: isRemoving ? TOAST_DEFAULTS.BOX_SHADOW_HIDDEN : TOAST_DEFAULTS.BOX_SHADOW,
           }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
+          transition={TRANSITIONS.NORMAL_EASE_OUT}
         >
           <motion.div
             animate={{ opacity: isRemoving ? 0 : 1 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
+            transition={TRANSITIONS.FAST_EASE_OUT}
           >
             <div
               className="toast-content"
@@ -135,12 +139,12 @@ export const Toast: React.FC<ToastComponentProps> = props => {
                   handleClose(e);
                 }
               }}
-              initial={{ opacity: 0, scale: 0.7 }}
+              initial={{ opacity: 0, scale: ANIMATION_SCALE.HIDDEN }}
               animate={{
                 opacity: isHovered ? 1 : 0,
-                scale: isHovered ? 1 : 0.7
+                scale: isHovered ? ANIMATION_SCALE.VISIBLE : ANIMATION_SCALE.HIDDEN
               }}
-              transition={{ type: 'spring', stiffness: 400, damping: 25, duration: 300 }}
+              transition={{ type: 'spring', ...SPRING_CONFIG, duration: 300 }}
               aria-label="Close notification"
               tabIndex={isHovered ? 0 : -1}
             >

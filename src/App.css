@@ -47,3 +47,14 @@ a:hover {
   border: 1px solid hsl(0, 0%, 93%);
   z-index: 100;
 }
+
+@media (max-width: 640px) {
+  :root {
+    --toast-max-width: calc(100vw - 48px);
+  }
+
+  .options-button-container {
+    left: auto;
+    right: 12px;
+  }
+}

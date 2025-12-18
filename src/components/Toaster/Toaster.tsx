@@ -4,6 +4,14 @@ import { TrashIcon } from '@radix-ui/react-icons';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { Toast, ToastProps } from '../Toast/Toast';
 import { AnimatedChevron } from './AnimatedChevron';
+import {
+  ANIMATION_SCALE,
+  ANIMATION_OFFSET,
+  ANIMATION_TIMEOUT,
+  TOAST_SPACING,
+  TOAST_DEFAULTS,
+  TRANSITIONS
+} from '../../constants/animations';
 import './Toaster.css';
 
 export interface ToasterProps {
@@ -13,7 +21,7 @@ export interface ToasterProps {
   maxToasts?: number;
 }
 
-const topOffset = 32;
+const topOffset = ANIMATION_OFFSET.VERTICAL;
 
 export const Toaster: React.FC<ToasterProps> = props => {
   const { toasts, onRemove, onRemoveAll, maxToasts = 3 } = props;
@@ -36,20 +44,20 @@ export const Toaster: React.FC<ToasterProps> = props => {
     });
   };
 
-  const collapsedSpacing = 8;
-  const expandedSpacing = 8;
+  const collapsedSpacing = TOAST_SPACING.COLLAPSED;
+  const expandedSpacing = TOAST_SPACING.EXPANDED;
 
   // total container height
   const visibleCount = isExpanded ? toasts.length : Math.min(toasts.length, maxToasts);
   let totalHeight = 0;
   if (isExpanded) {
     toasts.forEach((toast, i) => {
-      const height = heights.get(toast.id) || 80;
+      const height = heights.get(toast.id) || TOAST_DEFAULTS.HEIGHT;
       totalHeight += height;
       if (i < toasts.length - 1) totalHeight += expandedSpacing;
     });
   } else {
-    const frontToastHeight = heights.get(toasts[toasts.length - 1]?.id) || 80;
+    const frontToastHeight = heights.get(toasts[toasts.length - 1]?.id) || TOAST_DEFAULTS.HEIGHT;
     totalHeight = frontToastHeight + (visibleCount - 1) * collapsedSpacing;
   }
 
@@ -62,7 +70,7 @@ export const Toaster: React.FC<ToasterProps> = props => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={TRANSITIONS.NORMAL_EASE_OUT}
             onClick={() => setIsExpanded(false)}
           />
         )}
@@ -81,7 +89,7 @@ export const Toaster: React.FC<ToasterProps> = props => {
               const shouldBeVisible = isExpanded || index >= toasts.length - maxToasts;
               if (!shouldBeVisible) return null;
 
-              const backToastScale = 1 - (maxToasts - 1) * 0.05;
+              const backToastScale = 1 - (maxToasts - 1) * ANIMATION_SCALE.STACK_REDUCTION;
               const isEnteringBeyondMax = isExpanded && index < toasts.length - maxToasts;
               const lastVisibleToastY = (maxToasts - 1) * collapsedSpacing;
 
@@ -89,7 +97,7 @@ export const Toaster: React.FC<ToasterProps> = props => {
               // sorting by front toast (newest) onwards
               let expandedY = 0;
               for (let i = toasts.length - 1; i > index; i--) {
-                const nextHeight = heights.get(toasts[i].id) || 80;
+                const nextHeight = heights.get(toasts[i].id) || TOAST_DEFAULTS.HEIGHT;
                 expandedY += nextHeight + expandedSpacing;
               }
 
@@ -120,7 +128,7 @@ export const Toaster: React.FC<ToasterProps> = props => {
               initial={{ opacity: 0, y: -topOffset }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -topOffset }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
+              transition={TRANSITIONS.SLOW_EASE_OUT}
             >
               <Tooltip.Root>
                 <Tooltip.Trigger asChild>
@@ -142,7 +150,7 @@ export const Toaster: React.FC<ToasterProps> = props => {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.9 }}
-                      transition={{ duration: 0.15, ease: 'easeOut' }}
+                      transition={TRANSITIONS.FAST_EASE_OUT}
                     >
                       {isExpanded ? "Collapse All" : "Expand All"}
                     </motion.div>
@@ -159,13 +167,13 @@ export const Toaster: React.FC<ToasterProps> = props => {
                           setIsExpanded(false);
                           setTimeout(() => {
                             onRemoveAll();
-                          }, 150);
+                          }, ANIMATION_TIMEOUT.SHORT);
                         }}
                         className="dismiss-all-button"
-                        initial={{ opacity: 0, scale: 0.7 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.7}}
-                        transition={{ duration: 0.4, ease: 'easeOut', type: 'spring', stiffness: 400, damping: 25 }}
+                        initial={{ opacity: 0, scale: ANIMATION_SCALE.HIDDEN }}
+                        animate={{ opacity: 1, scale: ANIMATION_SCALE.VISIBLE }}
+                        exit={{ opacity: 0, scale: ANIMATION_SCALE.HIDDEN }}
+                        transition={TRANSITIONS.SLOW_SPRING}
                         aria-label="Dismiss all toasts"
                       >
                         <TrashIcon className="trash-icon" />
@@ -178,7 +186,7 @@ export const Toaster: React.FC<ToasterProps> = props => {
                           initial={{ opacity: 0, scale: 0.9 }}
                           animate={{ opacity: 1, scale: 1 }}
                           exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ duration: 0.15, ease: 'easeOut' }}
+                          transition={TRANSITIONS.FAST_EASE_OUT}
                         >
                           Dismiss all
                         </motion.div>

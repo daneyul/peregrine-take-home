@@ -42,7 +42,7 @@
 .options-button-container {
   position: fixed;
   top: calc(var(--top-offset) + 1rem);
-  left: calc(50% + (var(--toast-max-width) / 2) + 32px);
+  left: calc(50% + (var(--toast-max-width) / 2) + (var(--top-offset) * 2));
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -51,8 +51,8 @@
 
 .dismiss-all-button, .collapse-all-button {
   border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,7 +65,7 @@
 }
 
 .dismiss-all-button:active, .collapse-all-button:active {
-  scale: 0.95;
+  scale: 0.9;
 }
 
 .trash-icon, .close-icon, .dismiss-icon {
